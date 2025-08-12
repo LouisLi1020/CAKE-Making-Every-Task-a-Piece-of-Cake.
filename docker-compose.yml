@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: cake-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: cake123
+      MONGO_INITDB_DATABASE: cake_db
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker/mongo-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - cake-network
+
+  # Future: Add second database (e.g., PostgreSQL for analytics)
+  # postgres:
+  #   image: postgres:15
+  #   container_name: cake-postgres
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     POSTGRES_DB: cake_analytics
+  #     POSTGRES_USER: cake_user
+  #     POSTGRES_PASSWORD: cake123
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U cake_user -d cake_analytics"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #   networks:
+  #     - cake-network
+
+volumes:
+  mongodb_data:
+    driver: local
+  # postgres_data:
+  #   driver: local
+
+networks:
+  cake-network:
+    driver: bridge
