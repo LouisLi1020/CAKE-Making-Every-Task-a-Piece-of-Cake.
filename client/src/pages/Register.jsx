@@ -128,8 +128,8 @@ const Register = () => {
                 onChange={handleChange}
               >
                 <option value="member">Member</option>
-                <option value="assigner">Assigner</option>
-                <option value="creator">Creator</option>
+                <option value="leader">Leader</option>
+                <option value="manager">Manager</option>
               </select>
             </div>
             

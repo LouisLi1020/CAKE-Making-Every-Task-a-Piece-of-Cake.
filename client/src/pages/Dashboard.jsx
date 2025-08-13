@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const Dashboard = () => {
@@ -13,10 +14,32 @@ const Dashboard = () => {
       <nav className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-8">
               <h1 className="text-xl font-semibold text-gray-900">
-                Piece of Cake
+                 C.A.K.E.
               </h1>
+              <nav className="flex space-x-4">
+                <Link
+                  to="/dashboard"
+                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/clients"
+                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Clients
+                </Link>
+                {user?.role === 'manager' && (
+                  <Link
+                    to="/users"
+                    className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Users
+                  </Link>
+                )}
+              </nav>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-700">
@@ -82,14 +105,14 @@ const Dashboard = () => {
               </h2>
               
               <div className="text-sm text-gray-600">
-                {user?.role === 'creator' && (
-                  <p>As a Creator, you have full access to create and manage tasks, assign team members, and view all project data.</p>
+                {user?.role === 'manager' && (
+                  <p>As a Manager, you have full access to manage users, clients, tasks, and view all project data. You can assign team members and oversee all operations.</p>
                 )}
-                {user?.role === 'assigner' && (
-                  <p>As an Assigner, you can assign tasks to team members, change priorities, and view all tasks.</p>
+                {user?.role === 'leader' && (
+                  <p>As a Leader, you can assign tasks to team members, change priorities, and view all tasks. You can manage clients and coordinate team activities.</p>
                 )}
                 {user?.role === 'member' && (
-                  <p>As a Member, you can view assigned tasks and update your task status and time tracking.</p>
+                  <p>As a Member, you can view assigned tasks and update your task status and time tracking. You can manage your own clients.</p>
                 )}
               </div>
             </div>

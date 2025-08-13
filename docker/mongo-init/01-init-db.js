@@ -10,7 +10,7 @@ db.createCollection('users', {
       properties: {
         name: { bsonType: "string" },
         email: { bsonType: "string" },
-        role: { enum: ["creator", "assigner", "member"] },
+        role: { enum: ["manager", "leader", "member"] },
         password: { bsonType: "string" },
         status: { bsonType: "string" }
       }

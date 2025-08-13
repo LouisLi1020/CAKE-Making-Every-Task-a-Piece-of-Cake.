@@ -2,8 +2,8 @@
 
 // User roles (RWX-style permissions)
 export const ROLES = {
-  CREATOR: 'creator',    // rwx on own tasks, r on others
-  ASSIGNER: 'assigner',  // rw on assignment fields, r on others  
+  MANAGER: 'manager',    // rwx on own tasks, r on others
+  LEADER: 'leader',      // rw on assignment fields, r on others  
   MEMBER: 'member'       // r on assigned tasks, w on own status
 };
 

@@ -4,15 +4,21 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
+const clientRoutes = require('./routes/clients');
+const userRoutes = require('./routes/users');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cake';
 
 // Connect to MongoDB
+console.log('🔌 Attempting to connect to MongoDB...');
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+  .catch(err => {
+    console.error('❌ MongoDB connection error:', err.message);
+    console.log('⚠️  Server will start without database connection');
+  });
 
 // Middleware
 app.use(cors());
@@ -20,6 +26,8 @@ app.use(express.json());
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/clients', clientRoutes);
+app.use('/users', userRoutes);
 
 // Health check endpoint
 app.get('/healthz', (req, res) => {
@@ -42,6 +50,19 @@ app.get('/', (req, res) => {
         register: 'POST /auth/register',
         login: 'POST /auth/login',
         me: 'GET /auth/me'
+      },
+      clients: {
+        list: 'GET /clients',
+        create: 'POST /clients',
+        get: 'GET /clients/:id',
+        update: 'PUT /clients/:id',
+        delete: 'DELETE /clients/:id'
+      },
+      users: {
+        list: 'GET /users',
+        get: 'GET /users/:id',
+        update: 'PUT /users/:id',
+        delete: 'DELETE /users/:id'
       }
     }
   });
