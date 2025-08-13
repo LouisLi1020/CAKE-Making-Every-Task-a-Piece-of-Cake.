@@ -3,7 +3,7 @@ const router = express.Router();
 const Task = require('../models/Task');
 const Client = require('../models/Client');
 const User = require('../models/User');
-const auth = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 const { ROLES } = require('../../shared/constants');
 
 // Helper function to check task ownership
@@ -38,7 +38,7 @@ const canAssignTasks = (user) => {
 };
 
 // GET /tasks - Get all tasks with RBAC filtering
-router.get('/', auth, async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   try {
     const { page = 1, limit = 10, status, priority, clientId, search } = req.query;
     const skip = (page - 1) * limit;
@@ -62,11 +62,23 @@ router.get('/', auth, async (req, res) => {
     if (status) query.status = status;
     if (priority) query.priority = priority;
     if (clientId) query.clientId = clientId;
+    
+    // Handle search filter
     if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
-      ];
+      const searchQuery = {
+        $or: [
+          { title: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } }
+        ]
+      };
+      
+      // If we already have an $or condition (for role-based filtering), use $and
+      if (query.$or) {
+        query.$and = [query.$or, searchQuery];
+        delete query.$or;
+      } else {
+        query.$or = searchQuery.$or;
+      }
     }
 
     const tasks = await Task.findWithPopulate(query)
@@ -90,7 +102,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // GET /tasks/:id - Get single task
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', authenticate, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
       .populate('clientId', 'name tier')
@@ -113,7 +125,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // POST /tasks - Create new task
-router.post('/', auth, async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
     const { title, description, clientId, assigneeIds, priority, estimateHours, revenue } = req.body;
 
@@ -165,7 +177,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // PUT /tasks/:id - Update task
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) {
@@ -226,7 +238,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // DELETE /tasks/:id - Delete task
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) {
@@ -247,7 +259,7 @@ router.delete('/:id', auth, async (req, res) => {
 });
 
 // GET /tasks/stats/overview - Get task statistics
-router.get('/stats/overview', auth, async (req, res) => {
+router.get('/stats/overview', authenticate, async (req, res) => {
   try {
     const { from, to } = req.query;
     let dateFilter = {};
