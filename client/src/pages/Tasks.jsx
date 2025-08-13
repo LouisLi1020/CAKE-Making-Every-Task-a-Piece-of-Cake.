@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../services/api';
-import { TASK_STATUS, TASK_PRIORITY, ROLES } from '../../shared/constants';
+import { TASK_STATUS, TASK_PRIORITY, ROLES } from '../../../shared/constants';
 
 const Tasks = () => {
   const { user } = useAuth();
