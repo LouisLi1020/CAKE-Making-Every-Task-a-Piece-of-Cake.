@@ -1,4 +1,4 @@
-// Shared constants for Piece of Cake application
+// Shared constants for C.A.K.E. application
 
 // User roles (RWX-style permissions)
 export const ROLES = {
