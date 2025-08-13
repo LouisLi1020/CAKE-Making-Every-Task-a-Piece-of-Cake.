@@ -6,6 +6,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const clientRoutes = require('./routes/clients');
 const userRoutes = require('./routes/users');
+const taskRoutes = require('./routes/tasks');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/clients', clientRoutes);
 app.use('/users', userRoutes);
+app.use('/tasks', taskRoutes);
 
 // Health check endpoint
 app.get('/healthz', (req, res) => {
@@ -63,6 +65,14 @@ app.get('/', (req, res) => {
         get: 'GET /users/:id',
         update: 'PUT /users/:id',
         delete: 'DELETE /users/:id'
+      },
+      tasks: {
+        list: 'GET /tasks',
+        create: 'POST /tasks',
+        get: 'GET /tasks/:id',
+        update: 'PUT /tasks/:id',
+        delete: 'DELETE /tasks/:id',
+        stats: 'GET /tasks/stats/overview'
       }
     }
   });
