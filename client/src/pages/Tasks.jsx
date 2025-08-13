@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import { TASK_STATUS, TASK_PRIORITY, ROLES } from '../../../shared/constants';
+import Layout from '../components/Layout';
 
 const Tasks = () => {
   const { user } = useAuth();
@@ -204,7 +205,7 @@ const Tasks = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <Layout>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-900">Tasks</h1>
         <button
@@ -554,7 +555,7 @@ const Tasks = () => {
           </div>
         </div>
       )}
-    </div>
+    </Layout>
   );
 };
 
