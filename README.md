@@ -1,113 +1,324 @@
-## Piece of Cake — MERN Task Management + mini CRM
+# C.A.K.E — MERN Task Management + mini CRM
 
 A full‑stack web application for task management with lightweight CRM and statistics — like slicing a cake into pieces you can assign, track, and enjoy.
 
-### Key Features
-- **Task CRUD**: create, read, update, delete tasks
-- **User CRUD**: manage users and basic client records (mini‑CRM)
-- **Role/RWX‑style permissions**: task creator, assigner, member/other (similar to rwx)
-- **Task analytics**: revenue, average completion duration, customer satisfaction, on‑time rate
-- **Day/Night mode**: theme toggle with persistent preference
-- **Deployable to free tiers**: e.g. Railway (backend), MongoDB Atlas (DB), Netlify/Cloudflare Pages (frontend)
+## 🚀 Current Status
 
-### Tech Stack (proposed)
-- **Frontend**: React + Vite, React Router, state via React Query or minimal Context, CSS variables for theming
-- **Backend**: Node.js, Express, Mongoose (MongoDB), JSON Web Tokens (JWT) + RBAC middleware
-- **Database**: MongoDB Atlas free tier (or local MongoDB community)
-- **Charts/Stats**: lightweight chart lib (e.g. chart.js or recharts)
-- **Testing**: Vitest/RTL (frontend), Jest/Supertest (backend)
+**Milestones Completed**: M0-M4.5 ✅
+- **M0**: Environment & Repository Setup
+- **M1**: Scaffolding (Frontend + Backend)
+- **M2**: Authentication & Users (JWT, RBAC)
+- **M3**: Clients mini-CRM (CRUD operations)
+- **M4**: Tasks CRUD + RBAC (Role-based permissions)
+- **M4.5**: API Documentation & Testing (Swagger, Postman Collection)
 
-Note: We will verify your environment first; if missing, we’ll provide install steps per OS.
+**Next Milestone**: M5 - Feedback & Stats
 
-### Domain Model (initial)
-- **User**: { name, email, role: "creator" | "assigner" | "member", hashedPassword, status }
-- **Client**: { name, contactEmail, tier, notes }
-- **Task**: { title, description, clientId, assigneeIds, createdBy, status, priority, estimateHours, actualHours, revenue, createdAt, startedAt, completedAt }
-- **Feedback**: { taskId, clientId, score: 1–5, comment, createdAt }
+## ✨ Key Features
 
-Derived metrics:
-- Average completion duration = avg(completedAt - startedAt)
-- Revenue per period = sum(task.revenue within range)
-- CSAT = avg(feedback.score)
+### ✅ Implemented Features
+- **🔐 Authentication**: JWT-based auth with role-based access control
+- **👥 User Management**: Manager, Leader, Member roles with RWX-style permissions
+- **🏢 Client Management**: Mini-CRM with tier system (Basic, Premium, Enterprise)
+- **📋 Task Management**: Full CRUD with status tracking, priority levels, time estimation
+- **🔒 RBAC System**: Role-based permissions for all operations
+- **📊 Task Statistics**: Revenue tracking, completion metrics
+- **📚 API Documentation**: Swagger UI with complete endpoint documentation
+- **🧪 Testing Tools**: Postman Collection for comprehensive API testing
 
-### Folder Structure (planned)
-- `client/` React app (Vite)
-- `server/` Express API with Mongoose models and RBAC middleware
-- `shared/` optional DTO/types/constants (if needed)
-- `docs/` additional documentation (optional)
+### 🚧 Planned Features
+- **📈 Feedback System**: Client satisfaction tracking
+- **📊 Advanced Analytics**: Dashboard with charts and insights
+- **🌙 Theme System**: Day/Night mode with persistent preferences
+- **📱 Responsive Design**: Mobile-optimized UI/UX
+- **🧪 Automated Testing**: Unit and integration tests
+- **🚀 Deployment**: Production-ready deployment setup
 
-### Environment Prerequisites
-- Node.js LTS (≥ 18; recommended 20 LTS)
+## 🛠 Tech Stack
+
+### Frontend
+- **React 18** with Vite for fast development
+- **React Router** for navigation
+- **Tailwind CSS** for styling
+- **Axios** for API communication
+- **Context API** for state management
+
+### Backend
+- **Node.js** with Express.js
+- **MongoDB** with Mongoose ODM
+- **JWT** for authentication
+- **bcrypt** for password hashing
+- **express-rate-limit** for security
+- **Swagger** for API documentation
+
+### Development Tools
+- **ESLint** for code quality
+- **Postman** for API testing
+- **Thunder Client** for VS Code API testing
+- **Git** for version control
+
+### Database
+- **MongoDB Atlas** (cloud) or local MongoDB
+- **Indexed collections** for performance
+- **Data validation** with Mongoose schemas
+
+## 🏗 Project Architecture
+
+```
+cake/
+├── client/                 # React frontend
+│   ├── src/
+│   │   ├── components/     # Reusable components
+│   │   ├── contexts/       # React contexts
+│   │   ├── pages/          # Page components
+│   │   ├── services/       # API services
+│   │   └── assets/         # Static assets
+│   └── public/             # Public files
+├── server/                 # Express backend
+│   ├── models/             # Mongoose models
+│   ├── routes/             # API routes
+│   ├── middleware/         # Custom middleware
+│   ├── utils/              # Utility functions
+│   └── swagger.js          # API documentation
+├── shared/                 # Shared constants
+├── docs/                   # Documentation
+│   ├── API_TESTING_GUIDE.md
+│   └── C.A.K.E_API_Collection.json
+└── docker-compose.yml      # Development environment
+```
+
+## 🔐 Authentication & Authorization
+
+### User Roles
+- **Manager**: Full system access, user management
+- **Leader**: Task assignment, priority management
+- **Member**: Task execution, status updates
+
+### Permission Matrix
+| Operation | Manager | Leader | Member |
+|-----------|---------|--------|--------|
+| User Management | ✅ | ❌ | ❌ |
+| Client Management | ✅ | ✅ | ✅ |
+| Task Creation | ✅ | ✅ | ❌ |
+| Task Assignment | ✅ | ✅ | ❌ |
+| Task Updates | ✅ | ✅ | Limited |
+| Task Deletion | ✅ | ❌ | ❌ |
+
+## 📚 API Documentation
+
+### Interactive Documentation
+- **Swagger UI**: `http://localhost:3000/api-docs`
+- **Complete endpoint coverage** with request/response examples
+- **Authentication integration** for testing
+
+### Testing Tools
+- **Postman Collection**: `docs/C.A.K.E_API_Collection.json`
+- **Thunder Client**: VS Code extension for API testing
+- **Comprehensive test guide**: `docs/API_TESTING_GUIDE.md`
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js LTS (≥ 18)
 - npm or pnpm
+- MongoDB (Atlas or local)
 - Git
-- MongoDB: Atlas free tier account OR local MongoDB Community
 
-Quick checks (Windows/macOS/Linux):
-- `node -v`
-- `npm -v`
-- `git --version`
-- `mongosh --version` (or confirm Atlas credentials)
+### Installation
 
-If any are missing, see Install Notes below.
+1. **Clone Repository**
+   ```bash
+   git clone <repository-url>
+   cd cake
+   ```
 
-### Local Development (once environment is verified)
-1) Scaffold frontend and backend
-- Frontend: Vite React app in `client/`
-- Backend: Express + Mongoose in `server/`
+2. **Environment Setup**
+   ```bash
+   # Copy environment files
+   cp server/env.example server/.env
+   cp env.example .env
+   
+   # Configure your environment variables
+   # MONGODB_URI, JWT_SECRET, etc.
+   ```
 
-2) Configure environment variables
-- `server/.env`:
-  - `MONGODB_URI=...` (Atlas connection string or local)
-  - `JWT_SECRET=...`
-  - `PORT=4000`
+3. **Install Dependencies**
+   ```bash
+   # Backend
+   cd server
+   npm install
+   
+   # Frontend
+   cd ../client
+   npm install
+   ```
 
-3) Run apps
-- Backend: `npm run dev` inside `server/`
-- Frontend: `npm run dev` inside `client/` (proxy API or env var for API URL)
+4. **Start Development Servers**
+   ```bash
+   # Terminal 1: Backend
+   cd server
+   npm start
+   
+   # Terminal 2: Frontend
+   cd client
+   npm run dev
+   ```
 
-4) Visit the app
-- Frontend dev server: `http://localhost:5173`
+5. **Access Application**
+   - Frontend: `http://localhost:5173`
+   - Backend API: `http://localhost:3000`
+   - API Docs: `http://localhost:3000/api-docs`
 
-### Theming (Day/Night)
-- CSS variables on `:root` and `[data-theme="dark"]`
-- LocalStorage to persist theme
+## 📊 Data Models
 
-### RBAC (RWX‑like)
-- Roles: `creator`, `assigner`, `member`
-- Example rule set:
-  - creator: rwx on own tasks, r on others
-  - assigner: rw on any task assignment fields, r on others
-  - member: r on assigned tasks, w on own task status
+### User
+```javascript
+{
+  name: String,
+  email: String (unique),
+  password: String (hashed),
+  role: 'manager' | 'leader' | 'member',
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-Middleware sketches:
-- `requireAuth` (validate JWT)
-- `requireRole` (check role)
-- `requireOwnershipOrRole` (creator on own task or assigner)
+### Client
+```javascript
+{
+  name: String,
+  contact: {
+    email: String,
+    phone: String,
+    address: String
+  },
+  tier: 'basic' | 'premium' | 'enterprise',
+  notes: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-### API Outline (draft)
-- `POST /auth/login`, `POST /auth/register`
-- `GET/POST/PUT/DELETE /users`
-- `GET/POST/PUT/DELETE /clients`
-- `GET/POST/PUT/DELETE /tasks`
-- `GET /stats/overview?from=...&to=...`
+### Task
+```javascript
+{
+  title: String,
+  description: String,
+  clientId: ObjectId (ref: Client),
+  assigneeIds: [ObjectId] (ref: User),
+  createdBy: ObjectId (ref: User),
+  status: 'pending' | 'in-progress' | 'completed' | 'cancelled',
+  priority: 'low' | 'medium' | 'high' | 'urgent',
+  estimateHours: Number,
+  actualHours: Number,
+  revenue: Number,
+  startedAt: Date,
+  completedAt: Date,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-### Deployment (free‑tier friendly)
-- **Database**: MongoDB Atlas free tier
-- **Backend**: Railway free tier (Express)
-- **Frontend**: Netlify or Cloudflare Pages
+## 🔧 Development
 
-Basic flow:
-- Push repo to GitHub
-- Connect `server/` to Railway → set `MONGODB_URI` and `JWT_SECRET`
-- Connect `client/` to Netlify/Cloudflare Pages → set `VITE_API_URL`
+### Available Scripts
 
-### Install Notes
-- Windows: Node via `winget install -e --id OpenJS.NodeJS.LTS`
-- macOS: `brew install node`
-- Linux (Debian/Ubuntu): NodeSource or nvm
-- MongoDB: prefer Atlas; for local, install MongoDB Community + `mongosh`
+**Backend (server/)**
+```bash
+npm start          # Start production server
+npm run dev        # Start development server with nodemon
+```
 
-### Status
-- This README defines scope and the initial architecture. Next steps: verify environment, scaffold `client/` and `server/`, then implement auth, CRUD, RBAC, stats, theming, and deployment.
+**Frontend (client/)**
+```bash
+npm run dev        # Start development server
+npm run build      # Build for production
+npm run preview    # Preview production build
+```
+
+### Code Quality
+- **ESLint** configuration for both frontend and backend
+- **Consistent code formatting** with editor config
+- **Git conventions** for commit messages
+
+## 🧪 Testing
+
+### API Testing
+1. **Import Postman Collection**: `docs/C.A.K.E_API_Collection.json`
+2. **Follow Testing Guide**: `docs/API_TESTING_GUIDE.md`
+3. **Use Swagger UI**: Interactive API testing
+
+### Manual Testing
+- **Authentication flow**: Register → Login → Access protected routes
+- **CRUD operations**: Create, read, update, delete for all entities
+- **Role permissions**: Test different user roles and permissions
+- **Data validation**: Test input validation and error handling
+
+## 📈 Performance & Security
+
+### Performance Optimizations
+- **Database indexing** on frequently queried fields
+- **Pagination** for large datasets
+- **Efficient queries** with proper population
+- **Rate limiting** on authentication endpoints
+
+### Security Features
+- **JWT authentication** with secure token handling
+- **Password hashing** with bcrypt
+- **Input validation** and sanitization
+- **CORS configuration** for cross-origin requests
+- **Rate limiting** to prevent abuse
+
+## 🚀 Deployment
+
+### Production Setup
+- **Database**: MongoDB Atlas (free tier)
+- **Backend**: Railway, Render, or similar
+- **Frontend**: Netlify, Vercel, or Cloudflare Pages
+- **Environment Variables**: Configure for production
+
+### Environment Variables
+```bash
+# Backend (.env)
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=your-secret-key
+PORT=3000
+NODE_ENV=production
+
+# Frontend (.env)
+VITE_API_URL=https://your-api-url.com
+```
+
+## 🤝 Contributing
+
+1. **Fork the repository**
+2. **Create feature branch**: `git checkout -b feature/amazing-feature`
+3. **Commit changes**: `git commit -m 'feat: add amazing feature'`
+4. **Push to branch**: `git push origin feature/amazing-feature`
+5. **Open Pull Request**
+
+### Commit Convention
+- `feat:` New features
+- `fix:` Bug fixes
+- `docs:` Documentation changes
+- `style:` Code style changes
+- `refactor:` Code refactoring
+- `test:` Test additions/changes
+- `chore:` Build process or auxiliary tool changes
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- **Documentation**: Check `docs/` folder
+- **API Testing**: Use provided Postman collection
+- **Issues**: Create GitHub issue with detailed description
+- **Questions**: Open discussion in GitHub
+
+---
+
+**Built with ❤️ using the MERN stack**
 
 

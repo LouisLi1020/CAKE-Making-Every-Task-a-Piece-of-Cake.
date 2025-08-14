@@ -145,7 +145,7 @@ const Users = () => {
           <div className="flex justify-between h-16">
             <div className="flex items-center space-x-8">
               <h1 className="text-xl font-semibold text-gray-900">
-                Piece of Cake
+                C.A.K.E.
               </h1>
               <nav className="flex space-x-4">
                 <Link

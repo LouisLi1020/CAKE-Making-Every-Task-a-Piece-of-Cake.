@@ -42,6 +42,15 @@ Deliverable: manage clients, basic validation
 
 Deliverable: end‑to‑end task lifecycle under role rules
 
+### M4.5 — API Documentation & Testing (Day 4)
+- Swagger UI integration with complete endpoint documentation
+- Postman Collection for comprehensive API testing
+- API testing guide with test cases and validation
+- Basic UI/UX improvements and manual integration testing
+- Ensure API stability and documentation completeness
+
+Deliverable: fully documented and tested API with stable foundation for M5
+
 ### M5 — Feedback & Stats (Day 4–5)
 - Feedback model (taskId, clientId, score, comment)
 - Stats endpoint `/stats/overview?from&to` with:
