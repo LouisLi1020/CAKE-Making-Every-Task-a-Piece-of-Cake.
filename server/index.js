@@ -9,6 +9,8 @@ const authRoutes = require('./routes/auth');
 const clientRoutes = require('./routes/clients');
 const userRoutes = require('./routes/users');
 const taskRoutes = require('./routes/tasks');
+const feedbackRoutes = require('./routes/feedback');
+const statsRoutes = require('./routes/stats');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,6 +37,8 @@ app.use('/auth', authRoutes);
 app.use('/clients', clientRoutes);
 app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes);
+app.use('/feedback', feedbackRoutes);
+app.use('/stats', statsRoutes);
 
 // Health check endpoint
 app.get('/healthz', (req, res) => {
@@ -78,6 +82,18 @@ app.get('/', (req, res) => {
         update: 'PUT /tasks/:id',
         delete: 'DELETE /tasks/:id',
         stats: 'GET /tasks/stats/overview'
+      },
+      feedback: {
+        list: 'GET /feedback',
+        create: 'POST /feedback',
+        get: 'GET /feedback/:id',
+        update: 'PUT /feedback/:id',
+        delete: 'DELETE /feedback/:id'
+      },
+      stats: {
+        overview: 'GET /stats/overview',
+        trends: 'GET /stats/trends',
+        clients: 'GET /stats/clients'
       }
     }
   });
@@ -85,10 +101,13 @@ app.get('/', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    error: 'Something went wrong!'
-  });
+  console.error('Server error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Endpoint not found' });
 });
 
 // Start server
@@ -97,3 +116,5 @@ app.listen(PORT, () => {
   console.log(`📊 Health check: http://localhost:${PORT}/healthz`);
   console.log(`🔐 Auth endpoints: http://localhost:${PORT}/auth`);
 });
+
+module.exports = app;

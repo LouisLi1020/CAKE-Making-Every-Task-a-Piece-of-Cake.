@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import Clients from './pages/Clients';
 import Users from './pages/Users';
 import Tasks from './pages/Tasks';
+import Feedback from './pages/Feedback';
 import './App.css';
 
 function App() {
@@ -47,6 +48,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Tasks />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/feedback" 
+              element={
+                <ProtectedRoute>
+                  <Feedback />
                 </ProtectedRoute>
               } 
             />

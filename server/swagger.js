@@ -77,6 +77,66 @@ const options = {
             updatedAt: { type: 'string', format: 'date-time' }
           }
         },
+        Feedback: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string' },
+            taskId: { $ref: '#/components/schemas/Task' },
+            clientId: { $ref: '#/components/schemas/Client' },
+            score: { type: 'integer', minimum: 1, maximum: 5 },
+            comment: { type: 'string', maxLength: 1000 },
+            createdBy: { $ref: '#/components/schemas/User' },
+            scoreDescription: { type: 'string' },
+            createdAt: { type: 'string', format: 'date-time' },
+            updatedAt: { type: 'string', format: 'date-time' }
+          }
+        },
+        Stats: {
+          type: 'object',
+          properties: {
+            tasks: {
+              type: 'object',
+              properties: {
+                total: { type: 'integer' },
+                completed: { type: 'integer' },
+                pending: { type: 'integer' },
+                inProgress: { type: 'integer' },
+                completionRate: { type: 'string' }
+              }
+            },
+            revenue: {
+              type: 'object',
+              properties: {
+                total: { type: 'number' },
+                byClient: { type: 'array', items: { type: 'object' } }
+              }
+            },
+            hours: {
+              type: 'object',
+              properties: {
+                estimated: { type: 'number' },
+                actual: { type: 'number' },
+                efficiency: { type: 'string' }
+              }
+            },
+            completion: {
+              type: 'object',
+              properties: {
+                avgDuration: { type: 'string' },
+                minDuration: { type: 'string' },
+                maxDuration: { type: 'string' }
+              }
+            },
+            feedback: {
+              type: 'object',
+              properties: {
+                total: { type: 'integer' },
+                avgScore: { type: 'string' },
+                scoreDistribution: { type: 'object' }
+              }
+            }
+          }
+        },
         Error: {
           type: 'object',
           properties: {
