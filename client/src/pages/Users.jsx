@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { usersAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import Layout from '../components/Layout';
 
 const Users = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -105,10 +106,6 @@ const Users = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-  };
-
   // Check if user is manager
   if (user?.role !== 'manager') {
     return (
@@ -139,51 +136,8 @@ const Users = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center space-x-8">
-              <h1 className="text-xl font-semibold text-gray-900">
-                C.A.K.E.
-              </h1>
-              <nav className="flex space-x-4">
-                <Link
-                  to="/dashboard"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/clients"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Clients
-                </Link>
-                <Link
-                  to="/users"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Users
-                </Link>
-              </nav>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700">
-                Welcome, {user?.name} ({user?.role})
-              </span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Layout>
+      <div className="px-4 py-6 sm:px-0">
         {/* Header */}
         <div className="mb-8">
           <div className="flex justify-between items-center">
@@ -414,7 +368,7 @@ const Users = () => {
           </div>
         )}
       </div>
-    </div>
+    </Layout>
   );
 };
 
