@@ -1,76 +1,45 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
+import Sidebar from './Layout/Sidebar';
+import Header from './Layout/Header';
 
 const Layout = ({ children }) => {
-  const { user, logout } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true); // Start collapsed
 
-  const handleLogout = () => {
-    logout();
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(prev => !prev);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center space-x-8">
-              <h1 className="text-xl font-semibold text-gray-900">
-                C.A.K.E.
-              </h1>
-              <nav className="flex space-x-4">
-                <Link
-                  to="/dashboard"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/clients"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Clients
-                </Link>
-                <Link
-                  to="/tasks"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Tasks
-                </Link>
-                <Link
-                  to="/feedback"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Feedback
-                </Link>
-                {user?.role === 'manager' && (
-                  <Link
-                    to="/users"
-                    className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Users
-                  </Link>
-                )}
-              </nav>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700">
-                Welcome, {user?.name} ({user?.role})
-              </span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </button>
-            </div>
+    <div className={`min-h-screen w-full transition-colors duration-300`} style={{
+      background: 'linear-gradient(135deg, var(--background-color) 0%, var(--surface-color) 100%)',
+      color: 'var(--text-primary)'
+    }}>
+      {/* Sidebar Overlay */}
+      <Sidebar 
+        isCollapsed={isSidebarCollapsed} 
+        onToggle={toggleSidebar} 
+      />
+      
+      {/* Main Content Area - Full width */}
+      <div className="flex flex-col w-full">
+        {/* Header */}
+        <Header 
+          onThemeToggle={toggleTheme} 
+          isDarkMode={isDarkMode}
+          onSidebarToggle={toggleSidebar}
+        />
+        
+        {/* Main Content */}
+        <main className={`flex-1 w-full transition-colors duration-300`} style={{
+          background: 'linear-gradient(135deg, var(--background-color) 0%, var(--surface-color) 100%)'
+        }}>
+          <div className="w-full max-w-7xl mx-auto px-6">
+            {children}
           </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+        </main>
+      </div>
     </div>
   );
 };

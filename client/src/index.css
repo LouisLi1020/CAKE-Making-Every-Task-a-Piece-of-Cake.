@@ -1,3 +1,126 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+/* Theme CSS Variables - Lemon Cake (Light) & Blueberry (Dark) */
+:root {
+  /* Lemon Cake Theme - Light Mode */
+  --primary-color: #f59e0b;
+  --primary-hover: #d97706;
+  --secondary-color: #8b5a2b;
+  --background-color: #fef7ed;
+  --surface-color: #fff8e1;
+  --text-primary: #2d1b0e;
+  --text-secondary: #8b5a2b;
+  --border-color: #fbbf24;
+  --shadow-color: rgba(245, 158, 11, 0.1);
+  --sidebar-bg: #fff8e1;
+  --header-bg: #fff8e1;
+  --card-bg: #ffffff;
+  --accent-color: #fbbf24;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+}
+
+.dark {
+  /* Blueberry Theme - Dark Mode */
+  --primary-color: #646cff;
+  --primary-hover: #7c3aed;
+  --secondary-color: #a78bfa;
+  --background-color: #0f172a;
+  --surface-color: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --border-color: #334155;
+  --shadow-color: rgba(100, 108, 255, 0.2);
+  --sidebar-bg: #1e293b;
+  --header-bg: #1e293b;
+  --card-bg: #334155;
+  --accent-color: #8b5cf6;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+}
+
+/* Apply theme colors to elements */
+body {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Custom component styles */
+.theme-bg {
+  background-color: var(--background-color);
+}
+
+.theme-surface {
+  background-color: var(--surface-color);
+}
+
+.theme-text {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-border {
+  border-color: var(--border-color);
+}
+
+/* Gradient backgrounds */
+.lemon-gradient {
+  background: linear-gradient(135deg, #fef7ed 0%, #fff8e1 50%, #fbbf24 100%);
+}
+
+.blueberry-gradient {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #646cff 100%);
+}
+
+/* Card styles */
+.theme-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+/* Button styles */
+.theme-button-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.theme-button-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
