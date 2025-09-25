@@ -11,8 +11,11 @@ import {
   X
 } from 'lucide-react';
 import { Button } from './ui/button';
+import { NavLink } from 'react-router-dom';
 import { Switch } from './ui/switch';
 import { Card } from './ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { useAuth } from '../contexts/AuthContext';
 
 interface SidebarProps {
   darkMode: boolean;
@@ -21,37 +24,43 @@ interface SidebarProps {
 }
 
 export function Sidebar({ darkMode, setDarkMode, onClose }: SidebarProps) {
+  const { user } = useAuth();
   const navigationItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', active: true },
-    { icon: CheckSquare, label: 'Tasks', active: false },
-    { icon: Users, label: 'Clients', active: false },
-    { icon: User, label: 'Users', active: false },
-    { icon: MessageSquare, label: 'Feedback', active: false },
-    { icon: Settings, label: 'Settings', active: false },
+    { icon: LayoutDashboard, label: 'Dashboard', to: '/dashboard' },
+    { icon: CheckSquare, label: 'Tasks', to: '/tasks' },
+    { icon: Users, label: 'Clients', to: '/clients' },
+    { icon: User, label: 'Users', to: '/users' },
+    { icon: MessageSquare, label: 'Feedback', to: '/feedback' },
   ];
 
   return (
-    <div className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shadow-lg">
-      {/* Logo */}
-      <div className="p-6 border-b border-slate-200 dark:border-slate-800">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-              <LayoutDashboard className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold text-slate-900 dark:text-slate-100">C.A.K.E</span>
+    <div className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shadow-lg min-h-[calc(100vh-4.5rem)]">
+      {/* Drawer Header */}
+      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">Navigation</span>
+        {onClose && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+            onClick={onClose}
+          >
+            <X className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+          </Button>
+        )}
+      </div>
+
+      {/* User */}
+      <div className="p-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-3">
+          <Avatar className="w-9 h-9 border">
+            <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" />
+            <AvatarFallback>{user?.name?.charAt(0) || 'U'}</AvatarFallback>
+          </Avatar>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">{user?.name || 'User'}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email || 'user@cake.dev'}</p>
           </div>
-          {/* Close Button - Only visible on mobile */}
-          {onClose && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
-              onClick={onClose}
-            >
-              <X className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-            </Button>
-          )}
         </div>
       </div>
 
@@ -59,18 +68,21 @@ export function Sidebar({ darkMode, setDarkMode, onClose }: SidebarProps) {
       <div className="flex-1 p-4">
         <nav className="space-y-2">
           {navigationItems.map((item) => (
-            <Button
-              key={item.label}
-              variant={item.active ? "secondary" : "ghost"}
-              className={`w-full justify-start gap-3 h-12 rounded-xl transition-all duration-200 ${
-                item.active 
-                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm' 
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
-              }`}
-            >
-              <item.icon className="w-5 h-5" />
-              <span className="font-medium">{item.label}</span>
-            </Button>
+            <NavLink key={item.label} to={item.to} end>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive ? "secondary" : "ghost"}
+                  className={`w-full justify-start gap-3 h-12 rounded-xl transition-all duration-200 ${
+                    isActive
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                  }`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span className="font-medium">{item.label}</span>
+                </Button>
+              )}
+            </NavLink>
           ))}
         </nav>
 

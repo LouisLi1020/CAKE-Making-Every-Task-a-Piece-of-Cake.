@@ -168,21 +168,26 @@ export function MainContent() {
                   {['todo', 'in-progress', 'completed'].map(status => (
                     <TabsContent key={status} value={status} className="space-y-3">
                       {tasks.filter(task => task.status === status).map((task) => (
-                        <div key={task.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <button onClick={() => toggleTask(task.id)}>
+                        <div key={task.id} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:shadow-md transition-all duration-200 group">
+                          <div className="flex items-center gap-4">
+                            <button 
+                              onClick={() => toggleTask(task.id)}
+                              className="hover:scale-110 transition-transform duration-200"
+                            >
                               {getStatusIcon(task.status)}
                             </button>
                             <div>
-                              <p className={`font-medium ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>
+                              <p className={`font-semibold text-slate-900 dark:text-slate-100 ${task.status === 'completed' ? 'line-through text-slate-500' : ''}`}>
                                 {task.title}
                               </p>
-                              <p className="text-sm text-muted-foreground">Due: {task.dueDate}</p>
+                              <p className="text-sm text-slate-500 dark:text-slate-400">Due: {task.dueDate}</p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Badge variant="secondary" className={`w-3 h-3 p-0 ${getPriorityColor(task.priority)}`} />
-                            <span className="text-sm text-muted-foreground capitalize">{task.priority}</span>
+                          <div className="flex items-center gap-3">
+                            <div className={`w-3 h-3 rounded-full ${getPriorityColor(task.priority)} shadow-sm`} />
+                            <span className="text-sm font-medium text-slate-600 dark:text-slate-300 capitalize px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-md">
+                              {task.priority}
+                            </span>
                           </div>
                         </div>
                       ))}

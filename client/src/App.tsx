@@ -7,11 +7,11 @@ import Layout from './components/Layout';
 // Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
-import { Dashboard } from './components/Dashboard';
-// import Tasks from './pages/Tasks';
-// import Clients from './pages/Clients';
-// import Users from './pages/Users';
-// import Feedback from './pages/Feedback';
+import Home from './pages/Home';
+import Tasks from './pages/Tasks';
+import Clients from './pages/Clients';
+import Users from './pages/Users';
+import Feedback from './pages/Feedback';
 
 // UI Components
 import { Toaster } from './components/ui/sonner';
@@ -42,10 +42,15 @@ function App() {
         } />
         <Route path="/dashboard" element={
           <ProtectedRoute>
-            <Dashboard />
+            <Home />
           </ProtectedRoute>
         } />
-        {/* <Route path="/tasks" element={
+        <Route path="/home" element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        } />
+        <Route path="/tasks" element={
           <ProtectedRoute>
             <Layout>
               <Tasks />
@@ -72,7 +77,7 @@ function App() {
               <Feedback />
             </Layout>
           </ProtectedRoute>
-        } /> */}
+        } />
         
         {/* Catch all route */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

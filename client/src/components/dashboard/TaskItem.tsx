@@ -2,7 +2,7 @@ import React from 'react';
 import { CheckCircle, Circle, Clock, MoreVertical } from 'lucide-react';
 import { Task } from '../../types';
 import { components } from '../../lib/design-system';
-import { Button } from '../UI/button';
+import { Button } from '../ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../UI/dropdown-menu';
 
 interface TaskItemProps {

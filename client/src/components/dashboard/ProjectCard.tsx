@@ -1,7 +1,7 @@
 import React from 'react';
-import { Progress } from '../UI/progress';
+import { Progress } from '../ui/progress';
 import { Project } from '../../types';
-import { Avatar, AvatarFallback, AvatarImage } from '../UI/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 interface ProjectCardProps {
   project: Project;

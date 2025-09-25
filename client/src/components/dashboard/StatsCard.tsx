@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent } from '../UI/card';
+import { Card, CardContent } from '../ui/card';
 import { LucideIcon } from 'lucide-react';
 import { components } from '../../lib/design-system';
 
