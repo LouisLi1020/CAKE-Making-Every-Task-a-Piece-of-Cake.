@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Menu } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Input } from './ui/input';
-import { Button } from './ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Badge } from './ui/badge';
 import { useAuth } from '../contexts/AuthContext';
 
-interface HeaderProps {
-  onMenuClick?: () => void;
-  onRightPanelClick?: () => void;
-}
-
-export function Header({ onMenuClick, onRightPanelClick }: HeaderProps) {
+export function Header() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const { user } = useAuth();
 
@@ -43,16 +35,6 @@ export function Header({ onMenuClick, onRightPanelClick }: HeaderProps) {
   return (
     <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 lg:px-6 py-2 sticky top-16 z-40 shadow-sm">
       <div className="flex items-center justify-between gap-4">
-        {/* Mobile Menu Button */}
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="lg:hidden w-9 h-9 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"
-          onClick={onMenuClick}
-        >
-          <Menu className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-        </Button>
-
         {/* Greeting */}
         <h1 className="flex-1 min-w-0 text-lg lg:text-xl font-semibold text-slate-900 dark:text-slate-100 truncate">
           Good morning, {user?.name || 'User'}! — {formatDate(currentTime)} {formatTime(currentTime)}

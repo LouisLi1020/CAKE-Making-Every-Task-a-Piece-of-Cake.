@@ -42,12 +42,16 @@ function App() {
         } />
         <Route path="/dashboard" element={
           <ProtectedRoute>
-            <Home />
+            <Layout>
+              <Home />
+            </Layout>
           </ProtectedRoute>
         } />
         <Route path="/home" element={
           <ProtectedRoute>
-            <Home />
+            <Layout>
+              <Home />
+            </Layout>
           </ProtectedRoute>
         } />
         <Route path="/tasks" element={

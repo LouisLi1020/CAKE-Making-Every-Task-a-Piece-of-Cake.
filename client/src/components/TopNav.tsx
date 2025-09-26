@@ -28,6 +28,9 @@ export default function TopNav() {
         <NavLink to="/clients" className={({isActive}) => `${linkBase} ${isActive ? active : inactive}`}>
           <span className="inline-flex items-center gap-1"><Users className="w-4 h-4"/>Clients</span>
         </NavLink>
+        <NavLink to="/users" className={({isActive}) => `${linkBase} ${isActive ? active : inactive}`}>
+          Users
+        </NavLink>
         <NavLink to="/feedback" className={({isActive}) => `${linkBase} ${isActive ? active : inactive}`}>
           <span className="inline-flex items-center gap-1"><MessageSquare className="w-4 h-4"/>Feedback</span>
         </NavLink>
