@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
+  taskNumber: {
+    type: String,
+    unique: true
+  },
   title: {
     type: String,
     required: [true, 'Task title is required'],
@@ -77,8 +81,18 @@ taskSchema.virtual('duration').get(function() {
   return null;
 });
 
-// Pre-save middleware to update timestamps
-taskSchema.pre('save', function(next) {
+// Pre-save middleware to generate task number and update timestamps
+taskSchema.pre('save', async function(next) {
+  // Generate task number if it's a new task
+  if (this.isNew && !this.taskNumber) {
+    try {
+      const count = await this.constructor.countDocuments();
+      this.taskNumber = `TASK-${String(count + 1).padStart(3, '0')}`;
+    } catch (error) {
+      return next(error);
+    }
+  }
+  
   if (this.isModified('status')) {
     if (this.status === 'in-progress' && !this.startedAt) {
       this.startedAt = new Date();

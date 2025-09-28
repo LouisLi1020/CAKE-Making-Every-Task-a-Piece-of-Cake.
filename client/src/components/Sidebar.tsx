@@ -8,10 +8,11 @@ import {
   Settings, 
   Sun, 
   Moon,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 import { Button } from './ui/button';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Switch } from './ui/switch';
 import { Card } from './ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -24,7 +25,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ darkMode, setDarkMode, onClose }: SidebarProps) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const navigationItems = [
     { icon: LayoutDashboard, label: 'Dashboard', to: '/dashboard' },
     { icon: CheckSquare, label: 'Tasks', to: '/tasks' },
@@ -32,6 +34,11 @@ export function Sidebar({ darkMode, setDarkMode, onClose }: SidebarProps) {
     { icon: User, label: 'Users', to: '/users' },
     { icon: MessageSquare, label: 'Feedback', to: '/feedback' },
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shadow-lg min-h-[calc(100vh-4.5rem)]">
@@ -57,10 +64,19 @@ export function Sidebar({ darkMode, setDarkMode, onClose }: SidebarProps) {
             <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" />
             <AvatarFallback>{user?.name?.charAt(0) || 'U'}</AvatarFallback>
           </Avatar>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">{user?.name || 'User'}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email || 'user@cake.dev'}</p>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            className="h-8 w-8 p-0 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
+            title="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+          </Button>
         </div>
       </div>
 

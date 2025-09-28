@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import { Search, LogOut } from 'lucide-react';
 import { Input } from './ui/input';
+import { Button } from './ui/button';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export function Header() {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -32,13 +35,29 @@ export function Header() {
     });
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 lg:px-6 py-2 sticky top-16 z-40 shadow-sm">
       <div className="flex items-center justify-between gap-4">
         {/* Greeting */}
-        <h1 className="flex-1 min-w-0 text-lg lg:text-xl font-semibold text-slate-900 dark:text-slate-100 truncate">
-          Good morning, {user?.name || 'User'}! — {formatDate(currentTime)} {formatTime(currentTime)}
-        </h1>
+        <div className="flex-1 min-w-0 flex items-center gap-3">
+          <h1 className="text-lg lg:text-xl font-semibold text-slate-900 dark:text-slate-100 truncate">
+            Good morning, {user?.name || 'User'}! — {formatDate(currentTime)} {formatTime(currentTime)}
+          </h1>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            className="h-8 px-2 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
+            title="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+          </Button>
+        </div>
 
         {/* Search Bar (compact) */}
         <div className="relative w-56 lg:w-72 hidden">

@@ -26,9 +26,10 @@ const canReadTask = (task, user) => {
 
 // Helper function to check if user can write task
 const canWriteTask = (task, user) => {
-  if (user.role === ROLES.MANAGER && isTaskOwner(task, user._id)) return true;
-  if (user.role === ROLES.LEADER) return true;
-  if (isTaskAssignee(task, user._id)) return true;
+  if (user.role === ROLES.MANAGER) return true; // Manager can edit all tasks
+  if (user.role === ROLES.LEADER) return true; // Leader can edit all tasks
+  if (isTaskOwner(task, user._id)) return true; // Task creator can edit their tasks
+  if (isTaskAssignee(task, user._id)) return true; // Assignees can edit their tasks
   return false;
 };
 

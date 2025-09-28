@@ -1,33 +1,64 @@
-import React, { useState } from 'react';
-import { Plus, CheckCircle, Circle, Clock, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, CheckCircle, Circle, Clock, AlertCircle, Hash, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { TaskChart } from './TaskChart';
+import { tasksAPI, clientsAPI, usersAPI } from '../services/api';
+import { Task, Client, User } from '../types';
 
 export function MainContent() {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: 'Design new dashboard layout', status: 'completed', priority: 'high', dueDate: '2025-08-15' },
-    { id: 2, title: 'Implement user authentication', status: 'in-progress', priority: 'high', dueDate: '2025-08-16' },
-    { id: 3, title: 'Write API documentation', status: 'todo', priority: 'medium', dueDate: '2025-08-18' },
-    { id: 4, title: 'Setup CI/CD pipeline', status: 'todo', priority: 'low', dueDate: '2025-08-20' },
-    { id: 5, title: 'Review code changes', status: 'in-progress', priority: 'medium', dueDate: '2025-08-17' },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const projects = [
-    { name: 'Website Redesign', progress: 75, tasks: 12, completed: 9 },
-    { name: 'Mobile App', progress: 45, tasks: 8, completed: 4 },
-    { name: 'API Integration', progress: 90, tasks: 5, completed: 4 },
-  ];
+  // Load data from API
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const [tasksData, clientsData, usersData] = await Promise.all([
+          tasksAPI.getAll(),
+          clientsAPI.getAll(),
+          usersAPI.getAll()
+        ]);
+        
+        // Normalize data (handle both array and object with property)
+        const normalizedTasks = Array.isArray(tasksData) ? tasksData : (tasksData.tasks || tasksData.data || []);
+        const normalizedClients = Array.isArray(clientsData) ? clientsData : (clientsData.clients || clientsData.data || []);
+        const normalizedUsers = Array.isArray(usersData) ? usersData : (usersData.users || usersData.data || []);
+        
+        setTasks(normalizedTasks);
+        setClients(normalizedClients);
+        setUsers(normalizedUsers);
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const toggleTask = (id: number) => {
-    setTasks(tasks.map(task => 
-      task.id === id 
-        ? { ...task, status: task.status === 'completed' ? 'todo' : 'completed' }
-        : task
-    ));
+    loadData();
+  }, []);
+
+  const toggleTask = async (taskId: string) => {
+    try {
+      const task = tasks.find(t => t._id === taskId);
+      if (!task) return;
+
+      const newStatus = task.status === 'completed' ? 'pending' : 'completed';
+      await tasksAPI.update(taskId, { status: newStatus });
+      
+      // Update local state
+      setTasks(tasks.map(t => 
+        t._id === taskId ? { ...t, status: newStatus } : t
+      ));
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
   };
 
   const getStatusIcon = (status: string) => {
@@ -43,18 +74,82 @@ export function MainContent() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high':
+      case 'urgent':
         return 'bg-red-500';
+      case 'high':
+        return 'bg-orange-500';
       case 'medium':
         return 'bg-yellow-500';
-      default:
+      case 'low':
         return 'bg-green-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
+  // Calculate project statistics from real data
+  const getProjectStats = () => {
+    if (!Array.isArray(clients) || !Array.isArray(tasks)) {
+      return [];
+    }
+    
+    const clientStats = clients.map(client => {
+      const clientTasks = tasks.filter(task => 
+        typeof task.clientId === 'object' ? task.clientId._id === client._id : task.clientId === client._id
+      );
+      const completedTasks = clientTasks.filter(task => task.status === 'completed');
+      const progress = clientTasks.length > 0 ? Math.round((completedTasks.length / clientTasks.length) * 100) : 0;
+      
+      return {
+        name: client.name,
+        progress,
+        tasks: clientTasks.length,
+        completed: completedTasks.length
+      };
+    });
+
+    return clientStats;
+  };
+
+  const getAssigneeNames = (task: Task) => {
+    if (!Array.isArray(task.assigneeIds) || task.assigneeIds.length === 0) {
+      return 'Unassigned';
+    }
+    
+    const assigneeNames = task.assigneeIds.map(assignee => {
+      if (typeof assignee === 'object') {
+        return assignee.name || assignee.email;
+      }
+      const user = users.find(u => u._id === assignee);
+      return user ? (user.name || user.email) : 'Unknown';
+    });
+    
+    return assigneeNames.join(', ');
+  };
+
+  const getCreatorName = (task: Task) => {
+    if (typeof task.createdBy === 'object') {
+      return task.createdBy.name || task.createdBy.email;
+    }
+    const user = users.find(u => u._id === task.createdBy);
+    return user ? (user.name || user.email) : 'Unknown';
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   const completedTasks = tasks.filter(task => task.status === 'completed').length;
   const inProgressTasks = tasks.filter(task => task.status === 'in-progress').length;
-  const todoTasks = tasks.filter(task => task.status === 'todo').length;
+  const todoTasks = tasks.filter(task => task.status === 'pending').length;
+  const projects = getProjectStats();
 
   return (
     <main className="flex-1 p-6 overflow-auto bg-slate-50 dark:bg-slate-900">
@@ -133,26 +228,42 @@ export function MainContent() {
                 <Tabs defaultValue="all" className="w-full">
                   <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="all">All</TabsTrigger>
-                    <TabsTrigger value="todo">Todo</TabsTrigger>
+                    <TabsTrigger value="pending">Pending</TabsTrigger>
                     <TabsTrigger value="in-progress">In Progress</TabsTrigger>
                     <TabsTrigger value="completed">Completed</TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value="all" className="space-y-3">
                     {tasks.map((task) => (
-                      <div key={task.id} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:shadow-md transition-all duration-200 group">
+                      <div key={task._id} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:shadow-md transition-all duration-200 group">
                         <div className="flex items-center gap-4">
                           <button 
-                            onClick={() => toggleTask(task.id)}
+                            onClick={() => toggleTask(task._id)}
                             className="hover:scale-110 transition-transform duration-200"
                           >
                             {getStatusIcon(task.status)}
                           </button>
-                          <div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Hash className="w-3 h-3 text-slate-400" />
+                              <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                                {task.taskNumber}
+                              </span>
+                            </div>
                             <p className={`font-semibold text-slate-900 dark:text-slate-100 ${task.status === 'completed' ? 'line-through text-slate-500' : ''}`}>
                               {task.title}
                             </p>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">Due: {task.dueDate}</p>
+                            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                              <span>
+                                {typeof task.clientId === 'object' ? task.clientId.name : 
+                                 clients.find(c => c._id === task.clientId)?.name || 'Unknown Client'}
+                              </span>
+                              <span>•</span>
+                              <div className="flex items-center gap-1">
+                                <Users className="w-3 h-3" />
+                                <span>{getAssigneeNames(task)}</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -165,22 +276,42 @@ export function MainContent() {
                     ))}
                   </TabsContent>
                   
-                  {['todo', 'in-progress', 'completed'].map(status => (
+                  {['pending', 'in-progress', 'completed'].map(status => (
                     <TabsContent key={status} value={status} className="space-y-3">
                       {tasks.filter(task => task.status === status).map((task) => (
-                        <div key={task.id} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:shadow-md transition-all duration-200 group">
+                        <div key={task._id} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:shadow-md transition-all duration-200 group">
                           <div className="flex items-center gap-4">
                             <button 
-                              onClick={() => toggleTask(task.id)}
+                              onClick={() => toggleTask(task._id)}
                               className="hover:scale-110 transition-transform duration-200"
                             >
                               {getStatusIcon(task.status)}
                             </button>
-                            <div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Hash className="w-3 h-3 text-slate-400" />
+                                <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                                  {task.taskNumber}
+                                </span>
+                              </div>
                               <p className={`font-semibold text-slate-900 dark:text-slate-100 ${task.status === 'completed' ? 'line-through text-slate-500' : ''}`}>
                                 {task.title}
                               </p>
-                              <p className="text-sm text-slate-500 dark:text-slate-400">Due: {task.dueDate}</p>
+                              <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                                <span>
+                                  {typeof task.clientId === 'object' ? task.clientId.name : 
+                                   clients.find(c => c._id === task.clientId)?.name || 'Unknown Client'}
+                                </span>
+                                <span>•</span>
+                                <div className="flex items-center gap-1">
+                                  <Users className="w-3 h-3" />
+                                  <span>{getAssigneeNames(task)}</span>
+                                </div>
+                                <span>•</span>
+                                <span>
+                                  Created by {getCreatorName(task)}
+                                </span>
+                              </div>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">

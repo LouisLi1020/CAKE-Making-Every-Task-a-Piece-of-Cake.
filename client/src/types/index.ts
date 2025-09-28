@@ -4,9 +4,10 @@
 // User related types
 export interface User {
   _id: string;
+  name: string;
   username: string;
   email: string;
-  role: 'admin' | 'user' | 'manager';
+  role: 'manager' | 'leader' | 'member';
   avatar?: string;
   firstName?: string;
   lastName?: string;
@@ -17,16 +18,19 @@ export interface User {
 // Task related types
 export interface Task {
   _id: string;
+  taskNumber: string;
   title: string;
-  description?: string;
-  status: 'todo' | 'in-progress' | 'completed' | 'cancelled';
+  description: string;
+  clientId: string | Client;
+  assigneeIds: string[] | User[];
+  createdBy: string | User;
+  status: 'pending' | 'in-progress' | 'completed' | 'cancelled';
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  assignee?: User;
-  assigner?: User;
-  dueDate?: string;
+  estimateHours: number;
+  actualHours: number;
+  revenue: number;
+  startedAt?: string;
   completedAt?: string;
-  tags?: string[];
-  project?: string;
   createdAt: string;
   updatedAt: string;
 }
