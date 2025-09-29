@@ -1,6 +1,43 @@
 const mongoose = require('mongoose');
 
 const feedbackSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, 'Feedback title is required'],
+    trim: true,
+    maxlength: [200, 'Title cannot exceed 200 characters']
+  },
+  description: {
+    type: String,
+    required: [true, 'Feedback description is required'],
+    trim: true,
+    maxlength: [1000, 'Description cannot exceed 1000 characters']
+  },
+  type: {
+    type: String,
+    required: [true, 'Feedback type is required'],
+    enum: {
+      values: ['bug', 'feature', 'improvement', 'other'],
+      message: 'Type must be one of: bug, feature, improvement, other'
+    }
+  },
+  priority: {
+    type: String,
+    required: [true, 'Feedback priority is required'],
+    enum: {
+      values: ['low', 'medium', 'high'],
+      message: 'Priority must be one of: low, medium, high'
+    }
+  },
+  status: {
+    type: String,
+    required: [true, 'Feedback status is required'],
+    enum: {
+      values: ['open', 'in-progress', 'resolved', 'closed'],
+      message: 'Status must be one of: open, in-progress, resolved, closed'
+    },
+    default: 'open'
+  },
   taskId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Task',
