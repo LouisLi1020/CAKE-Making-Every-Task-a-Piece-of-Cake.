@@ -52,22 +52,29 @@ Deliverable: end‑to‑end task lifecycle under role rules
 Deliverable: fully documented and tested API with stable foundation for M5
 
 ### M5 — Feedback & Stats (Day 4–5) ✅
-- Feedback model (taskId, clientId, score, comment)
+- Feedback model (title, description, type, priority, status, taskId, clientId, score, comment)
+- CRUD endpoints with role checks
+- Frontend: Feedback list/detail/edit with table layout
 - Stats endpoint `/stats/overview?from&to` with:
   - revenue total and by client
   - avg completion duration
   - CSAT (avg feedback score)
 - Frontend: Dashboard with charts and filters
 
-Deliverable: dashboard shows metrics from real data
+Deliverable: feedback lifecycle + dashboard shows metrics from real data
 
-### M5.5 — Layout Consistency (Day 5) ✅
+### M5.5 — Enhanced UI/UX & Data Model Alignment (Day 5-6) ✅
 - Unified Layout component across all pages
 - Remove duplicate navigation code from individual pages
 - Ensure consistent navigation and logout functionality
-- Add Feedback link to navigation
+- Convert all pages to modern table-based layouts with sorting and filtering
+- Implement comprehensive search functionality across all entities
+- Fix data model mismatches between frontend and backend
+- Enhanced seed data for better demo experience
+- Improved RBAC implementation with task creator permissions
+- Dashboard integration with real-time data
 
-Deliverable: consistent navigation experience across all pages
+Deliverable: polished UI/UX with consistent data models and enhanced user experience
 
 ### M6 — Advanced UI/UX Components (Day 5-6)
 #### 6.1 — Responsive Sidebar Navigation ✅

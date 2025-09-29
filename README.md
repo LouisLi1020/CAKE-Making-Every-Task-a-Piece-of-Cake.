@@ -4,15 +4,17 @@ A full‑stack web application for task management with lightweight CRM and stat
 
 ## 🚀 Current Status
 
-**Milestones Completed**: M0-M4.5 ✅
+**Milestones Completed**: M0-M5.5 ✅
 - **M0**: Environment & Repository Setup
 - **M1**: Scaffolding (Frontend + Backend)
 - **M2**: Authentication & Users (JWT, RBAC)
 - **M3**: Clients mini-CRM (CRUD operations)
 - **M4**: Tasks CRUD + RBAC (Role-based permissions)
 - **M4.5**: API Documentation & Testing (Swagger, Postman Collection)
+- **M5**: Feedback System (CRUD operations with RBAC)
+- **M5.5**: Enhanced UI/UX with Table Layouts & Data Model Alignment
 
-**Next Milestone**: M5 - Feedback & Stats
+**Next Milestone**: M6 - Advanced Features & Polish
 
 ## ✨ Key Features
 
@@ -21,18 +23,20 @@ A full‑stack web application for task management with lightweight CRM and stat
 - **👥 User Management**: Manager, Leader, Member roles with RWX-style permissions
 - **🏢 Client Management**: Mini-CRM with tier system (Basic, Premium, Enterprise)
 - **📋 Task Management**: Full CRUD with status tracking, priority levels, time estimation
+- **💬 Feedback System**: Client feedback tracking with types, priorities, and status management
 - **🔒 RBAC System**: Role-based permissions for all operations
 - **📊 Task Statistics**: Revenue tracking, completion metrics
+- **🎨 Modern UI/UX**: Table-based layouts with sorting, filtering, and search functionality
 - **📚 API Documentation**: Swagger UI with complete endpoint documentation
 - **🧪 Testing Tools**: Postman Collection for comprehensive API testing
 
 ### 🚧 Planned Features
-- **📈 Feedback System**: Client satisfaction tracking
-- **📊 Advanced Analytics**: Dashboard with charts and insights
+- **📊 Advanced Analytics**: Enhanced dashboard with charts and insights
 - **🌙 Theme System**: Day/Night mode with persistent preferences
 - **📱 Responsive Design**: Mobile-optimized UI/UX
 - **🧪 Automated Testing**: Unit and integration tests
 - **🚀 Deployment**: Production-ready deployment setup
+- **📈 Performance Monitoring**: Real-time performance tracking
 
 ## 🛠 Tech Stack
 
