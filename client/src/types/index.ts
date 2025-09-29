@@ -55,12 +55,13 @@ export interface Project {
 export interface Client {
   _id: string;
   name: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  address?: string;
-  projects: Project[];
-  status: 'active' | 'inactive';
+  contact: {
+    email: string;
+    phone?: string;
+    address?: string;
+  };
+  tier: 'basic' | 'premium' | 'enterprise';
+  createdBy: string | User;
   createdAt: string;
   updatedAt: string;
 }
@@ -73,11 +74,11 @@ export interface FeedbackItem {
   type: 'bug' | 'feature' | 'improvement' | 'other';
   priority: 'low' | 'medium' | 'high';
   status: 'open' | 'in-progress' | 'resolved' | 'closed';
-  score?: number; // 1-10 rating
-  submittedBy: User;
-  assignedTo?: User;
-  task?: Task;
-  client?: Client;
+  score: number; // 1-5 rating
+  taskId: string | Task;
+  clientId: string | Client;
+  submittedBy: string | User;
+  assignedTo?: string | User;
   createdAt: string;
   updatedAt: string;
 }

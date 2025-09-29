@@ -99,7 +99,13 @@ Thumbs.db
 
 # Docker
 .dockerignore
+docker/
+docker-compose.yml
 
 # Temporary files
 *.tmp
 *.temp
+
+# Backup files
+**/backup/
+**/backups/
