@@ -159,4 +159,37 @@ export const tasksAPI = {
   },
 };
 
+// Feedback API
+export const feedbackAPI = {
+  // Get all feedback
+  getAll: async (params = {}) => {
+    const response = await api.get('/feedback', { params });
+    return response.data;
+  },
+
+  // Get single feedback
+  getById: async (id) => {
+    const response = await api.get(`/feedback/${id}`);
+    return response.data;
+  },
+
+  // Create feedback
+  create: async (feedbackData) => {
+    const response = await api.post('/feedback', feedbackData);
+    return response.data;
+  },
+
+  // Update feedback
+  update: async (id, feedbackData) => {
+    const response = await api.put(`/feedback/${id}`, feedbackData);
+    return response.data;
+  },
+
+  // Delete feedback
+  delete: async (id) => {
+    const response = await api.delete(`/feedback/${id}`);
+    return response.data;
+  },
+};
+
 export default api;
