@@ -9,6 +9,8 @@
    - Click the "Fork" button in the top-right corner
    - This creates a copy of the repository under your GitHub account
 
+> **Note**: This project is currently in M5.5 development phase with core functionality complete. All major features (Tasks, Clients, Users, Feedback) are implemented with full CRUD operations and RBAC.
+
 2. **Clone Your Fork**
    ```bash
    git clone https://github.com/YOUR_USERNAME/CAKE-Making-Every-Task-a-Piece-of-Cake.git

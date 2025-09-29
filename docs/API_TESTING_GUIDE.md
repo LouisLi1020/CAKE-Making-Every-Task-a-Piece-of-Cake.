@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides a complete API testing workflow to ensure all M4 functionality is thoroughly validated.
+This guide provides a complete API testing workflow to ensure all M5.5 functionality is thoroughly validated, including Tasks, Clients, Users, and Feedback management.
 
 ## Testing Tools
 
@@ -89,14 +89,15 @@ Content-Type: application/json
     "phone": "+1234567890",
     "address": "123 Test St"
   },
-  "tier": "premium",
-  "notes": "Test client"
+  "tier": "premium"
 }
 ```
 
 **Test Cases**:
-- ✅ Successful client creation
+- ✅ Successful client creation (Manager/Leader only)
 - ✅ Missing required fields error
+- ✅ Unauthorized access (Member role)
+- ✅ Duplicate email validation
 - ✅ No permission to create (different roles)
 
 #### 3.2 Get Client List
@@ -275,37 +276,50 @@ Authorization: Bearer <token>
 
 ## Testing Checklist
 
-### Authentication Features
-- [ ] User registration
-- [ ] User login
-- [ ] Token validation
-- [ ] Permission checking
+### Authentication Features (M5.5 ✅)
+- [x] User registration with validation
+- [x] User login with JWT tokens
+- [x] Token validation middleware
+- [x] Role-based permission checking
 
-### Client Management
-- [ ] Create client
-- [ ] Get client list
-- [ ] Update client
-- [ ] Delete client
-- [ ] Search and filter
+### Client Management (M5.5 ✅)
+- [x] Create client (Manager/Leader only)
+- [x] Get client list with pagination
+- [x] Update client (Manager/Leader only)
+- [x] Delete client (Manager/Leader only)
+- [x] Search and filter functionality
 
-### Task Management
-- [ ] Create task
-- [ ] Get task list
-- [ ] Update task
-- [ ] Delete task
-- [ ] Task statistics
-- [ ] Status management
+### Task Management (M5.5 ✅)
+- [x] Create task with auto-generated numbers
+- [x] Get task list with filtering and sorting
+- [x] Update task (Manager/Leader + Task Creator)
+- [x] Delete task (Manager only)
+- [x] Task statistics and analytics
+- [x] Status management with RBAC
 
-### User Management
-- [ ] Get user list
-- [ ] Get user details
-- [ ] Role permission validation
+### User Management (M5.5 ✅)
+- [x] Get user list (Manager only)
+- [x] Get user details
+- [x] Create user (Manager only)
+- [x] Update user (Manager only)
+- [x] Delete user (Manager only)
+- [x] Role permission validation
 
-### System Features
-- [ ] Health check
-- [ ] Error handling
-- [ ] Data validation
-- [ ] RBAC permissions
+### Feedback Management (M5.5 ✅)
+- [x] Create feedback (Manager/Leader only)
+- [x] Get feedback list with filtering
+- [x] Update feedback (Manager/Leader only)
+- [x] Delete feedback (Manager/Leader only)
+- [x] Feedback types and priorities
+- [x] Score validation (1-5)
+
+### System Features (M5.5 ✅)
+- [x] Health check endpoint
+- [x] Comprehensive error handling
+- [x] Data validation with Mongoose
+- [x] RBAC permissions across all endpoints
+- [x] API documentation with Swagger
+- [x] Database seeding for development
 
 ## Test Report Template
 

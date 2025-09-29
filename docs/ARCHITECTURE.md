@@ -1,31 +1,70 @@
-# C.A.K.E Frontend Architecture
+# C.A.K.E System Architecture
 
 ## 🏗 Architecture Design Principles
 
-### Separation of Concerns
-- **Pages**: Responsible for API calls, business logic, and state management
-- **Components**: Responsible for UI rendering and user interactions
-- **UI Components**: Reusable UI component library
+### Full-Stack Architecture
+- **Frontend**: React-based SPA with modern UI/UX
+- **Backend**: RESTful API with Express.js and MongoDB
+- **Database**: MongoDB with Mongoose ODM for data modeling
+- **Authentication**: JWT-based stateless authentication
 
-### File Organization
+### Separation of Concerns
+- **Pages**: Route-level components with API integration and business logic
+- **Components**: Reusable UI components and layout management
+- **Services**: Centralized API communication layer
+- **Contexts**: Global state management for authentication and themes
+
+### Frontend File Organization
 ```
-src/
-├── pages/           # Page components (API calls + business logic)
-│   ├── Dashboard.tsx
-│   ├── Tasks.tsx
-│   ├── Clients.tsx
-│   ├── Users.tsx
-│   ├── Feedback.tsx
-│   ├── Login.tsx
-│   └── Register.tsx
-├── components/      # Layout and business components
-│   ├── Layout.tsx   # Main layout component
-│   ├── Sidebar.tsx  # Sidebar navigation
-│   ├── Header.tsx   # Header component
-│   └── UI/          # UI component library
+client/src/
+├── pages/           # Route-level page components
+│   ├── Home.tsx     # Dashboard page wrapper
+│   ├── Tasks.tsx    # Task management with table layout
+│   ├── Clients.tsx  # Client management with CRUD
+│   ├── Users.tsx    # User management with RBAC
+│   ├── Feedback.tsx # Feedback management system
+│   ├── Login.tsx    # Authentication login
+│   └── Register.tsx # User registration
+├── components/      # Reusable components
+│   ├── Layout.tsx   # Main layout wrapper
+│   ├── TopNav.tsx   # Global navigation bar
+│   ├── Sidebar.tsx  # Collapsible sidebar
+│   ├── RightPanel.tsx # Right panel drawer
+│   ├── Dashboard.tsx # Dashboard implementation
+│   └── ui/          # shadcn/ui component library
 ├── contexts/        # React contexts
-├── services/        # API services
-└── App.tsx         # Main application component
+│   ├── AuthContext.tsx # Authentication state
+│   └── ThemeContext.tsx # Theme management
+├── services/        # API communication
+│   └── api.js       # Centralized API service
+├── types/           # TypeScript definitions
+│   └── index.ts     # Type interfaces
+└── hooks/           # Custom React hooks
+    └── useDashboard.ts # Dashboard data management
+```
+
+### Backend File Organization
+```
+server/
+├── models/          # Mongoose data models
+│   ├── User.js      # User schema with roles
+│   ├── Client.js    # Client schema with tiers
+│   ├── Task.js      # Task schema with assignment
+│   └── Feedback.js  # Feedback schema with types
+├── routes/          # Express API routes
+│   ├── auth.js      # Authentication endpoints
+│   ├── users.js     # User management endpoints
+│   ├── clients.js   # Client management endpoints
+│   ├── tasks.js     # Task management endpoints
+│   ├── feedback.js  # Feedback management endpoints
+│   └── stats.js     # Statistics endpoints
+├── middleware/      # Custom middleware
+│   └── auth.js      # JWT authentication
+├── utils/           # Utility functions
+│   └── jwt.js       # JWT token handling
+├── scripts/         # Database scripts
+│   └── seed.js      # Database seeding
+└── swagger.js       # API documentation
 ```
 
 ## 📁 Component Classification
